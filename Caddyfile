@@ -18,5 +18,5 @@ rewrite / {
         if {file} not_ends_with js
         if {file} not_ends_with css
         if {file} not_ends_with ico
-        to /mythweb/mythweb.php/{1}
+        to /mythweb.php/{1}
 }

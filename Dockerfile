@@ -1,15 +1,25 @@
-FROM pixelchrome/caddy-arm
+FROM armhf/alpine
 MAINTAINER Jeremy Bush <contractfrombelow@gmail.com>
 
-# Let the container know that there is no tty
-ENV DEBIAN_FRONTEND noninteractive
+LABEL caddy_version="0.11.0" architecture="ARMv7"
 
-RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
- apt-get update && \
- apt-get install --no-install-recommends -qy ca-certificates php7.0 php7.0-fpm && \
- apt-get clean
+RUN apk update && apk add --no-cache openssh-client tar wget
 
-RUN wget https://github.com/MythTV/mythweb/archive/fixes/29.tar.gz && \
-  mkdir mythweb && \
-  tar -C mythweb --strip-components=1 -zxvf 29.tar.gz && \
-  rm -rf 29.tar.gz
+# install caddy
+RUN wget https://github.com/mholt/caddy/releases/download/v0.11.0/caddy_v0.11.0_linux_arm7.tar.gz && \
+ tar -xzvf caddy_v0.11.0_linux_arm7.tar.gz && \
+ mv caddy /usr/bin && \
+ chmod 0755 /usr/bin/caddy && \
+ /usr/bin/caddy -version
+
+EXPOSE 2015
+VOLUME /root/.caddy
+WORKDIR /srv
+
+COPY Caddyfile /etc/Caddyfile
+
+COPY 29.tar.gz .
+RUN mkdir mythweb && tar -zxvf 29.tar.gz -C . && rm -rf 29.tar.gz
+
+ENTRYPOINT ["/usr/bin/caddy"]
+CMD ["--conf", "/etc/Caddyfile", "--log", "stdout"]

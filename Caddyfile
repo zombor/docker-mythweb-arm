@@ -1,0 +1,22 @@
+0.0.0.0
+
+tls off
+
+log stdout
+
+errors stdout
+
+fastcgi / /var/run/php7-fpm.sock php {
+        index mythweb.php
+        env db_server   "{%DATABASE_SERVER%}"
+        env db_name     "{%DATABASE_NAME%}"
+        env db_login    "{%DATABASE_USER%}"
+        env db_password "{%DATABASE_PASSWORD%}"
+}
+rewrite / {
+        r  (.*)
+        if {file} not_ends_with js
+        if {file} not_ends_with css
+        if {file} not_ends_with ico
+        to /mythweb/mythweb.php/{1}
+}

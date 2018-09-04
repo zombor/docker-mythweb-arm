@@ -3,7 +3,7 @@ MAINTAINER Jeremy Bush <contractfrombelow@gmail.com>
 
 LABEL caddy_version="0.11.0" architecture="ARMv7"
 
-RUN apk update && apk add --no-cache openssh-client tar wget
+RUN apk update && apk add --no-cache ca-certificates openssh-client tar wget
 
 # install caddy
 RUN wget https://github.com/mholt/caddy/releases/download/v0.11.0/caddy_v0.11.0_linux_arm7.tar.gz && \
@@ -18,8 +18,8 @@ WORKDIR /srv
 
 COPY Caddyfile /etc/Caddyfile
 
-COPY 29.tar.gz .
-RUN mkdir mythweb && tar -zxvf 29.tar.gz -C . && rm -rf 29.tar.gz
+RUN wget https://github.com/MythTV/mythweb/archive/v29.1.tar.gz && \
+ tar -zxvf v29.1.tar.gz --strip-components=1 -C . && rm -rf v29.1.tar.gz
 
 ENTRYPOINT ["/usr/bin/caddy"]
 CMD ["--conf", "/etc/Caddyfile", "--log", "stdout"]

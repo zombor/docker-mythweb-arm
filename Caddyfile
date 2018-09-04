@@ -6,7 +6,7 @@ log stdout
 
 errors stdout
 
-fastcgi / /var/run/php7-fpm.sock php {
+fastcgi / {%FPM_LOCATION} php {
         index mythweb.php
         env db_server   "{%DATABASE_SERVER%}"
         env db_name     "{%DATABASE_NAME%}"

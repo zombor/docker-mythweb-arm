@@ -6,12 +6,12 @@ log stdout
 
 errors stdout
 
-fastcgi / {%FPM_LOCATION} php {
+fastcgi / {$FPM_LOCATION} php {
         index mythweb.php
-        env db_server   "{%DATABASE_SERVER%}"
-        env db_name     "{%DATABASE_NAME%}"
-        env db_login    "{%DATABASE_USER%}"
-        env db_password "{%DATABASE_PASSWORD%}"
+        env db_server   "{$DATABASE_SERVER}"
+        env db_name     "{$DATABASE_NAME}"
+        env db_login    "{$DATABASE_USER}"
+        env db_password "{$DATABASE_PASSWORD}"
 }
 rewrite / {
         r  (.*)
